@@ -1,0 +1,16 @@
+body {
+    background: #352f5b;
+}
+
+.todos li {
+    background: #423a6f;
+}
+
+.delete {
+    cursor: pointer;
+}
+
+/* Filtered */
+.filtered {
+    display: none !important;
+}
