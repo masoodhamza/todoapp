@@ -1,47 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo App</title>
 
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous" />
 
-    <!-- google icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- google icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
-    <!-- style css -->
-    <link rel="stylesheet" href="style.css">
-
+  <!-- style css -->
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-4 offset-4 my-5">
-                <div class="card bg-primary">
-                    <h1 class="card-title text-center">Todo List</h1>
-                    <div class="card-header">
-                        <form class="search">
-                            <input type="search" name="search" class="form-control" placeholder="Search">
-                          </form>
-                    </div>
-                    
-                    <ul class="list-group list-group-flush todos text-light">
-                      <li class="list-group-item">An item 1<i class="material-icons float-right delete">delete</i></li>
-                      <li class="list-group-item">An item 2<i class="material-icons float-right delete">delete</i></li>
-                      <li class="list-group-item">An item 3<i class="material-icons float-right delete">delete</i></li>                      
-                    </ul>
-                    <div class="card-footer">
-                        <form class="add">
-                            <input type="text" name="add" class="form-control" placeholder="Add todo item">
-                          </form>
-                      </div>
-                  </div>
 
-            </div>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 offset-md-4 my-5">
+        <div class="card bg-primary">
+          <h1 class="card-title text-center">Todo List</h1>
+          <div class="card-header">
+            <form class="search">
+              <input type="search" name="search" class="form-control" placeholder="Search" />
+            </form>
+
+            <form class="add my-3">
+              <input type="text" name="add" class="form-control" placeholder="Add todo item" />
+            </form>        
+          </div>
+          <h3 class="my-2">Todos</h3>
+          <ul class="list-group list-group-flush todos text-light">
+            
+          </ul>
+          <h3 class="my-2">Completed</h3>
+          <ul class="list-group list-group-flush completed text-light">
+            
+          </ul>
         </div>
+      </div>
     </div>
+  </div>
+  <script src="todo.js"></script>
 </body>
+
 </html>

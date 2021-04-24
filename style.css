@@ -6,11 +6,18 @@ body {
     background: #423a6f;
 }
 
-.delete {
+.delete, 
+.done,
+.undo {
     cursor: pointer;
 }
 
 /* Filtered */
 .filtered {
     display: none !important;
+}
+
+.completed li{
+    text-decoration: line-through;
+    background: gray !important;
 }
