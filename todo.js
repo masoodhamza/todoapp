@@ -3,6 +3,19 @@ const addForm = document.querySelector(".add");
 const list = document.querySelector(".todos");
 const completed = document.querySelector(".completed");
 
+//get tasks from local storage
+const existingTodos = localStorage.getItem("todo");
+list.innerHTML = existingTodos;
+
+const existingComplted = localStorage.getItem("completed");
+completed.innerHTML = existingComplted;
+
+//update localstorage
+const updateLocalStorage = () => {
+  localStorage.setItem("completed", completed.innerHTML.toString());
+  localStorage.setItem("todo", list.innerHTML.toString());
+};
+
 addForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const todo = addForm.add.value.trim();
@@ -25,6 +38,7 @@ const generateTemplate = (todo) => {
   </li>
     `;
   list.innerHTML += html;
+  localStorage.setItem("todo", list.innerHTML.toString());
 };
 
 // Task 2: Implement the Delete Function.
@@ -32,6 +46,7 @@ const generateTemplate = (todo) => {
 list.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) {
     e.target.parentElement.remove();
+    updateLocalStorage();
   } else if (e.target.classList.contains("done")) {
     e.target.classList.add("undo");
     e.target.innerHTML = "undo";
@@ -40,6 +55,7 @@ list.addEventListener("click", (e) => {
     const done = e.target.parentElement.innerHTML;
     generateDone(done);
     e.target.parentElement.remove();
+    updateLocalStorage();
   }
 });
 
@@ -62,14 +78,6 @@ const filteredTodos = (term) => {
   Array.from(list.children)
     .filter((todo) => todo.textContent.toLowerCase().includes(term))
     .forEach((todo) => todo.classList.remove("filtered"));
-
-  Array.from(completed.children)
-    .filter((todo) => !todo.textContent.toLowerCase().includes(term))
-    .forEach((todo) => todo.classList.add("filtered"));
-
-  Array.from(completed.children)
-    .filter((todo) => todo.textContent.toLowerCase().includes(term))
-    .forEach((todo) => todo.classList.remove("filtered"));
 };
 
 // Task 4: Add another "complete" icon right next to the delete icon.
@@ -79,6 +87,7 @@ const filteredTodos = (term) => {
 completed.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) {
     e.target.parentElement.remove();
+    updateLocalStorage();
   } else if (e.target.classList.contains("undo")) {
     e.target.classList.add("done");
     e.target.innerHTML = "done";
@@ -87,6 +96,7 @@ completed.addEventListener("click", (e) => {
     const undo = e.target.parentElement.innerHTML;
     generateUndo(undo);
     e.target.parentElement.remove();
+    updateLocalStorage();
   }
 });
 
@@ -97,6 +107,7 @@ const generateDone = (done) => {
   </li>
     `;
   completed.innerHTML += html;
+  updateLocalStorage();
 };
 
 const generateUndo = (undo) => {
@@ -106,4 +117,5 @@ const generateUndo = (undo) => {
   </li>
     `;
   list.innerHTML += html;
+  updateLocalStorage();
 };
