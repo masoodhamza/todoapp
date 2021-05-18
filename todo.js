@@ -1,66 +1,93 @@
-// Task 1: Implement the Add Function.
+// Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: "AIzaSyCsYbVVwvsDYF5l8ATKDywEMt75Q8Jf5js",
+  authDomain: "todos-devnation.firebaseapp.com",
+  projectId: "todos-devnation",
+  storageBucket: "todos-devnation.appspot.com",
+  messagingSenderId: "918867420794",
+  appId: "1:918867420794:web:38857dfc247a6e15c4fdc3",
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Initialize Firestore
+const db = firebase.firestore();
+
+// Implement the Add Function.
 const addForm = document.querySelector(".add");
 const list = document.querySelector(".todos");
 const completed = document.querySelector(".completed");
 
-//get tasks from local storage
-const existingTodos = localStorage.getItem("todo");
-list.innerHTML = existingTodos;
-
-const existingComplted = localStorage.getItem("completed");
-completed.innerHTML = existingComplted;
-
-//update localstorage
-const updateLocalStorage = () => {
-  localStorage.setItem("completed", completed.innerHTML.toString());
-  localStorage.setItem("todo", list.innerHTML.toString());
-};
-
+//add form data
 addForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const todo = addForm.add.value.trim();
-  //call the generateTemplate function to add the Todo to the list.
-  if (todo.length) {
-    generateTemplate(todo);
-    // remove the todo from the input field.
+  const title = addForm.add.value.trim();
+  //call the addTodo function to add the Todo to the list.
+  if (title.length) {
+    const todo = {
+      title: title,
+    };
+
     addForm.reset();
+
+    db.collection("todos")
+      .add(todo)
+      .then(() => {
+        console.log("Todo added");
+      })
+      .catch((err) => console.log(err));
   }
 });
 
 //Implement a function that creates an HTML template that we can add to the DOM.
-
-const generateTemplate = (todo) => {
+const addTodo = (todo, id) => {
   const html = `
-  <li class="list-group-item">
-    ${todo}
-    <i class="material-icons float-right done">done</i>
-    <i class="material-icons float-right delete">delete</i>
+  <li class="list-group-item" data-id=${id}>
+    ${todo.title}
+    <button class="btn btn-danger float-right">
+      <i class="material-icons float-right delete">delete</i>
+    </button>
   </li>
     `;
   list.innerHTML += html;
-  localStorage.setItem("todo", list.innerHTML.toString());
 };
 
-// Task 2: Implement the Delete Function.
-
+// Delete documents from firestore.
 list.addEventListener("click", (e) => {
-  if (e.target.classList.contains("delete")) {
-    e.target.parentElement.remove();
-    updateLocalStorage();
-  } else if (e.target.classList.contains("done")) {
-    e.target.classList.add("undo");
-    e.target.innerHTML = "undo";
-    e.target.classList.remove("done");
-
-    const done = e.target.parentElement.innerHTML;
-    generateDone(done);
-    e.target.parentElement.remove();
-    updateLocalStorage();
+  if (e.target.tagName === "I") {
+    const id = e.target.parentElement.parentElement.getAttribute("data-id");
+    db.collection("todos")
+      .doc(id)
+      .delete()
+      .then(() => {
+        console.log("todo deleted");
+      });
   }
 });
 
-// Task 3: Implement the Searching & Filtering Function.
+const deleteTodo = (id) => {
+  const todos = document.querySelectorAll("li");
+  todos.forEach((todo) => {
+    if (todo.getAttribute("data-id") === id) {
+      todo.remove();
+    }
+  });
+};
 
+// Real Time UI Updates.
+// By attaching a real-time updates listener that firestore provides us.
+db.collection("todos").onSnapshot((snapshot) => {
+  snapshot.docChanges().forEach((change) => {
+    const doc = change.doc;
+    if (change.type === "added") {
+      addTodo(doc.data(), doc.id);
+    } else if (change.type === "removed") {
+      deleteTodo(doc.id);
+    }
+  });
+});
+
+// Implement the Searching & Filtering Function.
 const search = document.querySelector(".search input");
 
 search.addEventListener("keyup", () => {
@@ -69,7 +96,6 @@ search.addEventListener("keyup", () => {
 });
 
 // Implement a function that takes the term and matches with the todo item list.
-
 const filteredTodos = (term) => {
   Array.from(list.children)
     .filter((todo) => !todo.textContent.toLowerCase().includes(term))
@@ -78,44 +104,4 @@ const filteredTodos = (term) => {
   Array.from(list.children)
     .filter((todo) => todo.textContent.toLowerCase().includes(term))
     .forEach((todo) => todo.classList.remove("filtered"));
-};
-
-// Task 4: Add another "complete" icon right next to the delete icon.
-// Task 5: Implement a function that takes the "complete icon" and adds a click event listener
-// Task 6: background color (dull), strikethrough, add to the completed task
-
-completed.addEventListener("click", (e) => {
-  if (e.target.classList.contains("delete")) {
-    e.target.parentElement.remove();
-    updateLocalStorage();
-  } else if (e.target.classList.contains("undo")) {
-    e.target.classList.add("done");
-    e.target.innerHTML = "done";
-    e.target.classList.remove("undo");
-
-    const undo = e.target.parentElement.innerHTML;
-    generateUndo(undo);
-    e.target.parentElement.remove();
-    updateLocalStorage();
-  }
-});
-
-const generateDone = (done) => {
-  const html = `
-  <li class="list-group-item">
-    ${done}
-  </li>
-    `;
-  completed.innerHTML += html;
-  updateLocalStorage();
-};
-
-const generateUndo = (undo) => {
-  const html = `
-  <li class="list-group-item">
-    ${undo}
-  </li>
-    `;
-  list.innerHTML += html;
-  updateLocalStorage();
 };

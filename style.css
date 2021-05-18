@@ -1,23 +1,16 @@
 body {
-    background: #352f5b;
+  background: #352f5b;
 }
 
 .todos li {
-    background: #423a6f;
+  background: #423a6f;
 }
 
-.delete, 
-.done,
-.undo {
-    cursor: pointer;
+.delete {
+  cursor: pointer;
 }
 
 /* Filtered */
 .filtered {
-    display: none !important;
-}
-
-.completed li{
-    text-decoration: line-through;
-    background: gray !important;
+  display: none !important;
 }
